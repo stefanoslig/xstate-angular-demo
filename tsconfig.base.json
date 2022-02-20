@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@xstate-angular-demo/api-types": ["libs/core/api-types/src/index.ts"],
+      "@xstate-angular-demo/http-client": ["libs/core/http-client/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

@@ -1,7 +1,10 @@
 {
   "version": 2,
   "projects": {
+    "api-types": "libs/core/api-types",
+    "http-client": "libs/core/http-client",
     "secure-mail": "apps/secure-mail",
-    "secure-mail-e2e": "apps/secure-mail-e2e"
+    "secure-mail-e2e": "apps/secure-mail-e2e",
+    "api": "apps/api"
   }
 }
