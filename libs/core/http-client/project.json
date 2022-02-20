@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/http-client",
+  "sourceRoot": "libs/http-client/src",
+  "prefix": "code",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/http-client"],
+      "options": {
+        "jestConfig": "libs/http-client/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/http-client/src/**/*.ts",
+          "libs/http-client/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "projects": {
+    "secure-mail": "apps/secure-mail",
+    "secure-mail-e2e": "apps/secure-mail-e2e"
+  }
+}

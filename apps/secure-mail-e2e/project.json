@@ -1,0 +1,28 @@
+{
+  "root": "apps/secure-mail-e2e",
+  "sourceRoot": "apps/secure-mail-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/secure-mail-e2e/cypress.json",
+        "devServerTarget": "secure-mail:serve:development"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "secure-mail:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/secure-mail-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["secure-mail"]
+}
