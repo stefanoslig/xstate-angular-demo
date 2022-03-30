@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/mail/data-access",
+  "sourceRoot": "libs/mail/data-access/src",
+  "prefix": "xstate-angular-demo",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/mail/data-access"],
+      "options": {
+        "jestConfig": "libs/mail/data-access/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/mail/data-access/src/**/*.ts",
+          "libs/mail/data-access/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

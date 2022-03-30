@@ -1,10 +1,14 @@
 {
   "version": 2,
   "projects": {
+    "api": "apps/api",
     "api-types": "libs/core/api-types",
-    "http-client": "libs/core/http-client",
+    "mail-data-access": "libs/mail/data-access",
+    "mail-feature-compose": "libs/mail/feature-compose",
     "secure-mail": "apps/secure-mail",
     "secure-mail-e2e": "apps/secure-mail-e2e",
-    "api": "apps/api"
+    "shared-api-types": "libs/shared/api-types",
+    "shared-data-access": "libs/shared/data-access",
+    "shared-ui": "libs/shared/ui"
   }
 }

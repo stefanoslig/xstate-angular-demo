@@ -1,14 +1,14 @@
 {
   "projectType": "library",
-  "root": "libs/http-client",
-  "sourceRoot": "libs/http-client/src",
-  "prefix": "code",
+  "root": "libs/shared/ui",
+  "sourceRoot": "libs/shared/ui/src",
+  "prefix": "xstate-angular-demo",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/http-client"],
+      "outputs": ["coverage/libs/shared/ui"],
       "options": {
-        "jestConfig": "libs/http-client/jest.config.js",
+        "jestConfig": "libs/shared/ui/jest.config.js",
         "passWithNoTests": true
       }
     },
@@ -16,8 +16,8 @@
       "executor": "@nrwl/linter:eslint",
       "options": {
         "lintFilePatterns": [
-          "libs/http-client/src/**/*.ts",
-          "libs/http-client/src/**/*.html"
+          "libs/shared/ui/src/**/*.ts",
+          "libs/shared/ui/src/**/*.html"
         ]
       }
     }
