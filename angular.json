@@ -2,7 +2,6 @@
   "version": 2,
   "projects": {
     "api": "apps/api",
-    "api-types": "libs/core/api-types",
     "mail-data-access": "libs/mail/data-access",
     "mail-feature-compose": "libs/mail/feature-compose",
     "secure-mail": "apps/secure-mail",

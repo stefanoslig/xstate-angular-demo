@@ -1,1 +1,1 @@
-export * from './lib/mail-feature-compose.module';
+export * from './lib/mail-compose.component';

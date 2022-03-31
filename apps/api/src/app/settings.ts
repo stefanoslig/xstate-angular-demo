@@ -1,4 +1,4 @@
-import { AdminSettings } from "@xstate-angular-demo/api-types";
+import { AdminSettings } from "@xstate-angular-demo/shared/api-types";
 
 export const settings: AdminSettings =  {
   secureSendEnabledByDefault: true

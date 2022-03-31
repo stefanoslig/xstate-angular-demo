@@ -6,7 +6,9 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/secure-mail",
         "index": "apps/secure-mail/src/index.html",
@@ -18,7 +20,10 @@
           "apps/secure-mail/src/favicon.ico",
           "apps/secure-mail/src/assets"
         ],
-        "styles": ["apps/secure-mail/src/styles.scss"],
+        "styles": [
+          "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+          "apps/secure-mail/src/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -83,7 +88,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/secure-mail"],
+      "outputs": [
+        "coverage/apps/secure-mail"
+      ],
       "options": {
         "jestConfig": "apps/secure-mail/jest.config.js",
         "passWithNoTests": true

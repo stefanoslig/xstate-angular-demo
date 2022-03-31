@@ -6,7 +6,9 @@
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/mail/data-access"],
+      "outputs": [
+        "coverage/libs/mail/data-access"
+      ],
       "options": {
         "jestConfig": "libs/mail/data-access/jest.config.js",
         "passWithNoTests": true

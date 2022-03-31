@@ -6,7 +6,9 @@
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/mail/feature-compose"],
+      "outputs": [
+        "coverage/libs/mail/feature-compose"
+      ],
       "options": {
         "jestConfig": "libs/mail/feature-compose/jest.config.js",
         "passWithNoTests": true
