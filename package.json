@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "~13.2.0",
     "@angular/router": "~13.2.0",
     "@nrwl/angular": "13.8.3",
+    "@xstate/inspect": "^0.6.4",
     "body-parser": "^1.19.2",
     "cors": "2.8.5",
     "crypto": "^1.0.1",
@@ -29,6 +30,7 @@
     "express": "4.17.1",
     "rxjs": "~7.4.0",
     "tslib": "^2.0.0",
+    "xstate": "^4.30.6",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

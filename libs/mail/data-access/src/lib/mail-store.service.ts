@@ -5,45 +5,15 @@ import {
   ViolationsResponse,
 } from '@xstate-angular-demo/shared/api-types';
 import { Store } from '@xstate-angular-demo/shared/data-access';
-import { map } from 'rxjs';
+import { BehaviorSubject, from, map, shareReplay } from 'rxjs';
 import { MailApiService } from './mail-api.service';
-
-export interface MailState {
-  settings: AdminSettings;
-  violations: ViolationsResponse;
-}
-
-const initialState: MailState = {
-  settings: { secureSendEnabledByDefault: false },
-  violations: { isValid: true, violations: [] },
-};
-
+import { interpret } from 'xstate';
+import { mailMachine } from './mail-state-machine';
 @Injectable({
   providedIn: 'root',
 })
-export class MailStoreService extends Store<MailState> {
-  settings$ = this.state$.pipe(map((state) => state.settings));
-  violations$ = this.state$.pipe(map((state) => state.violations));
-
-  constructor(private mailApiService: MailApiService) {
-    super(initialState);
-  }
-
-  fetchSettings() {
-    this.mailApiService.fetchSettings().subscribe((settings) =>
-      this.setState({
-        ...this.state,
-        settings,
-      })
-    );
-  }
-
-  validateDraft(draft: Draft) {
-    this.mailApiService.validateDraft(draft).subscribe((violations) => {
-      this.setState({
-        ...this.state,
-        violations,
-      });
-    });
-  }
+export class MailStoreService {
+  _service = interpret(mailMachine, { devTools: true }).start();
+  state$ = from(this._service).pipe(shareReplay());
+  send = this._service.send;
 }

@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, ChangeDetectionStrategy, NgModule } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  NgModule,
+  OnInit,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -7,7 +12,19 @@ import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Recipient } from '@xstate-angular-demo/shared/api-types';
+import { Recipient, Violation } from '@xstate-angular-demo/shared/api-types';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import {
+  mailMachineModel,
+  MailStoreService,
+} from '@xstate-angular-demo/mail/data-access';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'xstate-angular-demo-mail-compose',
@@ -15,10 +32,31 @@ import { Recipient } from '@xstate-angular-demo/shared/api-types';
   styleUrls: ['./mail-compose.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MailComposeComponent {
+export class MailComposeComponent implements OnInit {
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   recipients: Recipient[] = [];
+  draftForm!: FormGroup;
+  violations$!: Observable<Array<Violation>>;
+
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly mailStoreService: MailStoreService
+  ) {}
+
+  ngOnInit() {
+    this.draftForm = this.fb.group({
+      to: [''],
+      subject: [''],
+      body: [''],
+    });
+
+    this.draftForm.valueChanges.subscribe((draft) =>
+      this.mailStoreService.send(mailMachineModel.events.draftChanged(draft))
+    );
+
+    this.violations$ = this.mailStoreService.state$.pipe(map((state) => state.context.violations));
+  }
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
@@ -49,7 +87,9 @@ export class MailComposeComponent {
     MatInputModule,
     MatChipsModule,
     MatIconModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   declarations: [MailComposeComponent],
   exports: [MailComposeComponent],
