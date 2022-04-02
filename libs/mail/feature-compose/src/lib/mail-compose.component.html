@@ -1,6 +1,17 @@
 <mat-card>
-  <mat-slide-toggle class="mb-4">Secure send</mat-slide-toggle>
+  <mat-slide-toggle
+    class="example-margin"
+    [color]="'primary'"
+    [checked]="secureSend$ | async"
+    (change)="toggle()"
+  >
+    Secure send
+  </mat-slide-toggle>
   <form [formGroup]="draftForm">
+    <mat-form-field appearance="fill">
+      <mat-label>From:</mat-label>
+      <input formControlName="from" matInput readonly />
+    </mat-form-field>
     <mat-form-field class="example-chip-list" appearance="fill">
       <mat-label>To:</mat-label>
       <mat-chip-list #chipList aria-label="Recipients">
@@ -8,7 +19,7 @@
           *ngFor="let recipient of recipients"
           (removed)="remove(recipient)"
         >
-          {{ recipient.email }}
+          {{ recipient }}
           <button matChipRemove>
             <mat-icon>cancel</mat-icon>
           </button>
@@ -40,19 +51,15 @@
   </form>
 
   <div
-    *ngIf="violations$ | async as violations"
-    class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+    *ngFor="let violation of violations$ | async"
+    class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-2"
     role="alert"
   >
-    <div *ngIf="violations.length > 0">
-      <strong class="font-bold">Holy smokes!</strong>
-      <span class="block sm:inline">Something seriously bad happened.</span>
-    </div>
+    <strong class="font-bold">Holy smokes!</strong>
+    <span class="block sm:inline">{{ violation.description }}</span>
   </div>
 
-  <button
-    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-6 w-32"
-  >
+  <button class="send-button" [disabled]="draftInvalid$ | async">
     Send
   </button></mat-card
 >

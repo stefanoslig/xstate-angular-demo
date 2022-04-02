@@ -23,7 +23,7 @@ export class MailApiService {
 
   validateDraft(draft: Draft): Observable<ViolationsResponse> {
     return this.http.post<ViolationsResponse>(`${this.apiUrl}/violations`, {
-      draft,
+      ...draft,
     });
   }
 }

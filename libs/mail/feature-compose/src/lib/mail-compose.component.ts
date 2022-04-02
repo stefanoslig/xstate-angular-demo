@@ -12,20 +12,21 @@ import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Recipient, Violation } from '@xstate-angular-demo/shared/api-types';
+import { Draft, Violation } from '@xstate-angular-demo/shared/api-types';
 import {
   FormBuilder,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  Validators,
 } from '@angular/forms';
 import {
   mailMachineModel,
   MailStoreService,
 } from '@xstate-angular-demo/mail/data-access';
-import { map, Observable } from 'rxjs';
+import { debounceTime, map, Observable } from 'rxjs';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'xstate-angular-demo-mail-compose',
   templateUrl: './mail-compose.component.html',
@@ -35,9 +36,11 @@ import { map, Observable } from 'rxjs';
 export class MailComposeComponent implements OnInit {
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  recipients: Recipient[] = [];
+  recipients: string[] = [];
   draftForm!: FormGroup;
   violations$!: Observable<Array<Violation>>;
+  secureSend$!: Observable<boolean>;
+  draftInvalid$!: Observable<boolean>;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -45,37 +48,64 @@ export class MailComposeComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.draftForm = this.fb.group({
-      to: [''],
-      subject: [''],
-      body: [''],
-    });
+    this.draftForm = this.buildForm();
+    this.sendDraftOnChanges();
 
-    this.draftForm.valueChanges.subscribe((draft) =>
-      this.mailStoreService.send(mailMachineModel.events.draftChanged(draft))
+    this.violations$ = this.mailStoreService.state$.pipe(
+      map((state) => state.context.violations)
     );
-
-    this.violations$ = this.mailStoreService.state$.pipe(map((state) => state.context.violations));
+    this.secureSend$ = this.mailStoreService.state$.pipe(
+      map((state) => state.matches('TOGGLE.SECURE_SEND_ON'))
+    );
+    this.draftInvalid$ = this.mailStoreService.state$.pipe(
+      map((state) => state.matches('MAIL.INVALID'))
+    );
   }
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
-    // Add our fruit
     if (value) {
-      this.recipients.push({ email: value });
+      this.recipients.push(value);
     }
 
-    // Clear the input value
-    event.chipInput!.clear();
+    event.chipInput?.clear();
   }
 
-  remove(to: Recipient): void {
+  remove(to: string): void {
     const index = this.recipients.indexOf(to);
 
     if (index >= 0) {
       this.recipients.splice(index, 1);
     }
+  }
+
+  toggle() {
+    this.mailStoreService.send(mailMachineModel.events.toggle());
+  }
+
+  private buildForm(): FormGroup {
+    return this.fb.group({
+      from: ['stefanos@gmail.com'],
+      to: [''],
+      subject: [''],
+      body: [''],
+    });
+  }
+
+  private sendDraftOnChanges() {
+    this.draftForm.valueChanges
+      .pipe(debounceTime(200), untilDestroyed(this))
+      .subscribe((values) =>
+        this.mailStoreService.send(
+          mailMachineModel.events.draftChanged({
+            from: values.from,
+            recipients: { to: this.recipients },
+            subject: values.subject,
+            body: values.body,
+          })
+        )
+      );
   }
 }
 

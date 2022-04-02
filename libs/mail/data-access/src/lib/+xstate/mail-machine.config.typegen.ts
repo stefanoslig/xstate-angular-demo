@@ -8,14 +8,18 @@ export interface Typegen0 {
   internalEvents: {
     'xstate.init': { type: 'xstate.init' };
   };
-  invokeSrcNameMap: {};
+  invokeSrcNameMap: {
+    validate: 'done.invoke.Mail Machine.MAIL.VALIDATING:invocation[0]';
+  };
   missingImplementations: {
-    actions: never;
-    services: never;
-    guards: never;
+    actions: 'setViolations';
+    services: 'validate';
+    guards: 'isValid';
     delays: never;
   };
-  eventsCausingServices: {};
+  eventsCausingServices: {
+    validate: 'draftChanged';
+  };
   eventsCausingGuards: {
     isValid: 'validatingDraftSuccess';
   };

@@ -14,7 +14,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-const blackList = ['bsn', 'personal data', 'passport']
+const blackList = ['bsn', 'personal data', 'passport'];
 
 app.get('/settings', (req, res) => {
   res.json(settings);
@@ -24,9 +24,13 @@ app.post<unknown, ViolationsResponse, Draft>('/violations', (req, res) => {
   const draft = req.body;
   const fromDomain: string = (parseOneAddress(draft.from) as any).domain;
 
-  const externalDomains = parseAddressList(
-    draft.recipients.to.join(', ')
-  ).filter((item) => (item as any).domain !== fromDomain);
+  const parsedAddressList = parseAddressList(draft.recipients.to.join(', '));
+  let externalDomains = [];
+  if (parsedAddressList) {
+    externalDomains = parsedAddressList.filter(
+      (item) => (item as any).domain !== fromDomain
+    );
+  }
   const violations: Array<Violation> = [];
 
   if (externalDomains.length > 0) {
@@ -36,17 +40,17 @@ app.post<unknown, ViolationsResponse, Draft>('/violations', (req, res) => {
     });
   }
 
-  if(draft.subject && textIncludesWordFromBlacklist(draft.subject)) {
+  if (draft.subject && textIncludesWordFromBlacklist(draft.subject)) {
     violations.push({
       id: crypto.randomUUID(),
-      description: "The subject contains sensitive data",
+      description: 'The subject contains sensitive data',
     });
   }
 
-  if(draft.body && textIncludesWordFromBlacklist(draft.body)) {
+  if (draft.body && textIncludesWordFromBlacklist(draft.body)) {
     violations.push({
       id: crypto.randomUUID(),
-      description: "The body contains sensitive data",
+      description: 'The body contains sensitive data',
     });
   }
   // Mimic network latency
@@ -62,11 +66,10 @@ app.listen(3000, () => {
   console.log('Example app listening on port 3000!');
 });
 
-
 function textIncludesWordFromBlacklist(text: string) {
   for (let i = 0; i < blackList.length; i++) {
     if (text.includes(blackList[i])) {
-     return true;
+      return true;
     }
   }
 

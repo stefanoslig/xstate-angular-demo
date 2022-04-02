@@ -6,10 +6,11 @@ import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, MailFeatureComposeComponentModule, BrowserAnimationsModule],
+  imports: [BrowserModule, MailFeatureComposeComponentModule, BrowserAnimationsModule, HttpClientModule],
   providers: [{ provide: API_URL, useValue: environment.api_url }],
   bootstrap: [AppComponent],
 })
