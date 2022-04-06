@@ -12,9 +12,9 @@ export class MailStoreService {
   private _service = interpret(
     mailMachine.withConfig({
       services: {
-        validate: (_, event) =>
+        validate: (context) =>
           this.mailApiService
-            .validateDraft(event.draft)
+            .validateDraft(context.draft)
             .pipe(
               map((result) =>
                 mailMachineModel.events.validatingDraftSuccess(
@@ -25,11 +25,21 @@ export class MailStoreService {
       },
       actions: {
         setViolations: mailMachineModel.assign({
-          violations: (_, event: any) => event.violations,
+          violations: (_, event) => event.violations,
+        }),
+        setDraftHasChanged: mailMachineModel.assign({
+          draftHasChanged: () => true,
+        }),
+        setDraft: mailMachineModel.assign({
+          draft: (_, event) => event.draft,
+        }),
+        setWarning: mailMachineModel.assign({
+          violations: (_, event) => event.violations,
         }),
       },
       guards: {
         isValid: (_, event) => event.violations.length < 0,
+        draftHasChanged: (context) => context.draftHasChanged,
       },
     }),
     { devTools: true } // set this based on an environment variable

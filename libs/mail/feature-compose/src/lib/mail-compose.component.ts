@@ -55,10 +55,10 @@ export class MailComposeComponent implements OnInit {
       map((state) => state.context.violations)
     );
     this.secureSend$ = this.mailStoreService.state$.pipe(
-      map((state) => state.matches('TOGGLE.SECURE_SEND_ON'))
+      map((state) => state.matches('SECURE_SEND_ON'))
     );
     this.draftInvalid$ = this.mailStoreService.state$.pipe(
-      map((state) => state.matches('MAIL.INVALID'))
+      map((state) => state.matches('SECURE_SEND_ON.INVALID'))
     );
   }
 

@@ -3,38 +3,47 @@
 export interface Typegen0 {
   '@@xstate/typegen': true;
   eventsCausingActions: {
+    setDraft: 'draftChanged';
+    setDraftHasChanged: 'draftChanged';
+    setWarning: 'validatingDraftSuccess';
     setViolations: 'validatingDraftSuccess';
   };
   internalEvents: {
+    '': { type: '' };
     'xstate.init': { type: 'xstate.init' };
   };
   invokeSrcNameMap: {
-    validate: 'done.invoke.Mail Machine.MAIL.VALIDATING:invocation[0]';
+    validate:
+      | 'done.invoke.Mail Machine.SECURE_SEND_OFF.VALIDATING:invocation[0]'
+      | 'done.invoke.Mail Machine.SECURE_SEND_ON.VALIDATING:invocation[0]';
   };
   missingImplementations: {
-    actions: 'setViolations';
+    actions: 'setDraft' | 'setDraftHasChanged' | 'setWarning' | 'setViolations';
     services: 'validate';
-    guards: 'isValid';
+    guards: 'draftHasChanged' | 'isValid';
     delays: never;
   };
   eventsCausingServices: {
-    validate: 'draftChanged';
+    validate: 'draftChanged' | '';
   };
   eventsCausingGuards: {
+    draftHasChanged: '';
     isValid: 'validatingDraftSuccess';
   };
   eventsCausingDelays: {};
   matchesStates:
-    | 'TOGGLE'
-    | 'TOGGLE.SECURE_SEND_OFF'
-    | 'TOGGLE.SECURE_SEND_ON'
-    | 'MAIL'
-    | 'MAIL.VALIDATING'
-    | 'MAIL.VALID'
-    | 'MAIL.INVALID'
+    | 'SECURE_SEND_OFF'
+    | 'SECURE_SEND_OFF.IDLE'
+    | 'SECURE_SEND_OFF.VALIDATING'
+    | 'SECURE_SEND_OFF.WARNING'
+    | 'SECURE_SEND_ON'
+    | 'SECURE_SEND_ON.IDLE'
+    | 'SECURE_SEND_ON.VALIDATING'
+    | 'SECURE_SEND_ON.VALID'
+    | 'SECURE_SEND_ON.INVALID'
     | {
-        TOGGLE?: 'SECURE_SEND_OFF' | 'SECURE_SEND_ON';
-        MAIL?: 'VALIDATING' | 'VALID' | 'INVALID';
+        SECURE_SEND_OFF?: 'IDLE' | 'VALIDATING' | 'WARNING';
+        SECURE_SEND_ON?: 'IDLE' | 'VALIDATING' | 'VALID' | 'INVALID';
       };
   tags: never;
 }
