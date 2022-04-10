@@ -27,19 +27,15 @@ export class MailStoreService {
         setViolations: mailMachineModel.assign({
           violations: (_, event) => event.violations,
         }),
-        setDraftHasChanged: mailMachineModel.assign({
-          draftHasChanged: () => true,
+        resetViolations: mailMachineModel.assign({
+          violations: () => [],
         }),
         setDraft: mailMachineModel.assign({
           draft: (_, event) => event.draft,
         }),
-        setWarning: mailMachineModel.assign({
-          violations: (_, event) => event.violations,
-        }),
       },
       guards: {
-        isValid: (_, event) => event.violations.length < 0,
-        draftHasChanged: (context) => context.draftHasChanged,
+        isInvalid: (_, event) => event.violations.length > 0,
       },
     }),
     { devTools: true } // set this based on an environment variable

@@ -23,7 +23,7 @@ import {
   mailMachineModel,
   MailStoreService,
 } from '@xstate-angular-demo/mail/data-access';
-import { debounceTime, map, Observable } from 'rxjs';
+import { debounceTime, map, merge, Observable } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 @UntilDestroy()
@@ -36,10 +36,10 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 export class MailComposeComponent implements OnInit {
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  recipients: string[] = [];
   draftForm!: FormGroup;
   violations$!: Observable<Array<Violation>>;
   secureSend$!: Observable<boolean>;
+  promptState$!: Observable<boolean>;
   draftInvalid$!: Observable<boolean>;
 
   constructor(
@@ -49,7 +49,6 @@ export class MailComposeComponent implements OnInit {
 
   ngOnInit() {
     this.draftForm = this.buildForm();
-    this.sendDraftOnChanges();
 
     this.violations$ = this.mailStoreService.state$.pipe(
       map((state) => state.context.violations)
@@ -60,23 +59,63 @@ export class MailComposeComponent implements OnInit {
     this.draftInvalid$ = this.mailStoreService.state$.pipe(
       map((state) => state.matches('SECURE_SEND_ON.INVALID'))
     );
+    this.promptState$ = this.mailStoreService.state$.pipe(
+      map((state) => state.matches('SECURE_SEND_OFF.PROMPT'))
+    );
+
+    this.draftForm
+      .get('subject')
+      ?.valueChanges.pipe(debounceTime(200), untilDestroyed(this))
+      .subscribe((subject) =>
+        this.mailStoreService.send(
+          mailMachineModel.events.draftChanged({
+            ...this.draftForm.value,
+            subject,
+          })
+        )
+      );
+
+    this.draftForm
+      .get('body')
+      ?.valueChanges.pipe(debounceTime(200), untilDestroyed(this))
+      .subscribe((body) =>
+        this.mailStoreService.send(
+          mailMachineModel.events.draftChanged({
+            ...this.draftForm.value,
+            body,
+          })
+        )
+      );
+
+    this.to?.valueChanges
+      .pipe(debounceTime(200), untilDestroyed(this))
+      .subscribe((to) =>
+        this.mailStoreService.send(
+          mailMachineModel.events.draftChanged({
+            ...this.draftForm.value,
+            recipients: { to },
+          })
+        )
+      );
   }
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
     if (value) {
-      this.recipients.push(value);
+      this.to?.value.push(value);
+      this.to?.updateValueAndValidity();
     }
 
     event.chipInput?.clear();
   }
 
   remove(to: string): void {
-    const index = this.recipients.indexOf(to);
+    const index = this.to?.value.indexOf(to);
 
     if (index >= 0) {
-      this.recipients.splice(index, 1);
+      this.to?.value.splice(index, 1);
+      this.to?.updateValueAndValidity();
     }
   }
 
@@ -84,28 +123,19 @@ export class MailComposeComponent implements OnInit {
     this.mailStoreService.send(mailMachineModel.events.toggle());
   }
 
+  get to() {
+    return this.draftForm.get('recipients')?.get('to');
+  }
+
   private buildForm(): FormGroup {
     return this.fb.group({
       from: ['stefanos@gmail.com'],
-      to: [''],
+      recipients: this.fb.group({
+        to: [[]],
+      }),
       subject: [''],
       body: [''],
     });
-  }
-
-  private sendDraftOnChanges() {
-    this.draftForm.valueChanges
-      .pipe(debounceTime(200), untilDestroyed(this))
-      .subscribe((values) =>
-        this.mailStoreService.send(
-          mailMachineModel.events.draftChanged({
-            from: values.from,
-            recipients: { to: this.recipients },
-            subject: values.subject,
-            body: values.body,
-          })
-        )
-      );
   }
 }
 

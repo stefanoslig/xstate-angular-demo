@@ -16,19 +16,15 @@ app.use(cors());
 
 const blackList = ['bsn', 'personal data', 'passport'];
 
-app.get('/settings', (req, res) => {
-  res.json(settings);
-});
-
 app.post<unknown, ViolationsResponse, Draft>('/violations', (req, res) => {
   const draft = req.body;
-  const fromDomain: string = (parseOneAddress(draft.from) as any).domain;
+  const fromDomain: string = (parseOneAddress(draft.from) as any)?.domain;
 
   const parsedAddressList = parseAddressList(draft.recipients.to.join(', '));
   let externalDomains = [];
   if (parsedAddressList) {
     externalDomains = parsedAddressList.filter(
-      (item) => (item as any).domain !== fromDomain
+      (item) => (item as any)?.domain !== fromDomain
     );
   }
   const violations: Array<Violation> = [];
@@ -59,11 +55,11 @@ app.post<unknown, ViolationsResponse, Draft>('/violations', (req, res) => {
       isValid: violations.length === 0,
       violations,
     });
-  }, Math.random() * 3000);
+  }, Math.random() * 1000);
 });
 
-app.listen(3000, () => {
-  console.log('Example app listening on port 3000!');
+app.listen(3005, () => {
+  console.log('Example app listening on port 3005!');
 });
 
 function textIncludesWordFromBlacklist(text: string) {
