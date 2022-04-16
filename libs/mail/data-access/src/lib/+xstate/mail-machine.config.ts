@@ -1,89 +1,95 @@
 import { mailMachineModel } from './mail-machine.model';
 
 export const mailMachine =
-  /** @xstate-layout N4IgpgJg5mDOIC5QFkCGBLANgAjQYwAt0A7MAOgGUBRAYQFUAlKgfWoDkARZgeQDFeyASQ4AZKgGJEoAA4B7WOgAu6WcSkgAHogC0ANgCM+sgCYAHAGYADPoDs+0wE4HpmwFYANCACeOh5bL6ACxmToGBlro2psYAvjGeaFi4qIQk5NT0TKxUnDz8ZABqAIIiwkUAKoJsAOLiAG6omOgQqMrEUBwATqgAZooUAK54eHDwSCByCsqq6loI2oHmRmZWrvrOi26mHt46QboBwQ62NpY2NubGZ3EJGDj4RKSUtIws7Fx8vOKKslBQmGB1JMlCo1OM5tp1q4yK5AqZdJFtpZTHD4Z4fAh9JYHGRzK5Tg5jMYHK5dLDXLF4iBEvcUo90i8su88l8IN0+jQCKh2pAgfIQTNwTpzkZos5Ccc4acbOjEE5cfizoFbHiRQ4btS7slUk8Mq9srluGwhKIJHypqDZogbDiyWFXBTdPbXGdZfNCWQnSEHGEIlFjLoNTTtfTnpk3jkPsbiqUOBUqrUGk0Wm0Ouz+kMRrAxjJ+dMwaA5oFSTDjn5XOZCYENm7IVdPUcrmSHX5LK4g1qHmkw-rmUbvr9-oDxsD81b5qYImQxY5iUEXK7dvNzIsG3PLOZ4cqzIEO0ku7rGRHDWxxGzeopOdyYBBzQKC5odAjp8Sq8i4YtlW6HAdtgSiSSdoUnEVLELIEBwOowYHgy4YGh8+TCGId5jkK8wXOYASuJOQTEpYxYUrWBiHHhdrFpcFaBlS0F0t2epMpGLKFCUZSVDUKGWmhCzGIEuIogYQSVvCugOG6kTToqFymBYug8cie60jqsG9oxnxkAA6kUDBsAmHGCoWwp2C+4pzlKi4Yvo+IKqc0nYvo5iXLopgKSGdFHvBLJ6Q+EI2tCM4SvO0q1sYSwkRYKJttYQTttRna0YecF9saSFUF547cSYVywvY5i6NYxg7BieiYV6fhkRWBW5S5ME9gxJ7MbG8bsSOeacQZCDGOs052ORfr4SSxhusSAQIoYbiXBc2JktV8XKXVUYNcIaVoQiNi4gGIVrK4Dg2iutaBAcuF+Nu0QOqSVG3Pus21ceC1VDGS0tRa+mPvMz5im+KIoiu+i1vZxhrn4-0VjYwTObFV1KTdHlGst7XaH4xmfR+P3BbYa7RFcRJkrl5gzUpcOvdoFj+P5pkLjKS4LPoBxehYWIyYSlJxEAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QGUwGMCuAnMACAtgIYCWANgHTICiAwgKoBKVA+tQHIAizA8gGK-kAkhwAyVAMSJQABwD2sYgBdisgHZSQAD0QBOHQBZyARh0B2AEz6DAVh0Bma6dMAaEAE9E5gGyHLRgAz6RsEG-v7WXgC+ka6omDgEJBTU9EysVJw8-OQAagCCIsJ5ACqCbADi4gBuhKTEEITKqlAcWIQAZorIGGhocPBIIHIKymoa2ghGlgAc5F7h4UZepj525kauHgjrXuRm+nbL82Gm0xbRsejYeERklLSMLOxcfLziirJQUKRgGsNKKnUgwm1nMm0Qph0e3MtgMZzsgS802mFxAcWuiTuKUe6Uyr3EEDanRoAAtCM1IH95ACxsDENN9LNHOYEfYdIsdOCEIdfEF-OYLPp-PNrHZUeiErdkg80s8eGwhKIJFSRoDxp41nMYf4jNMdDCvOYdNM7Fz9KY7MYEWFzCaYQ4dOKrpKkvdUk8Mi8FflChwSmVKjU6g0mi0iV0en1YAMZNTRkDQBNGaZyP41pCdKLbAdrFzrIFyNMvHY7FZhUihQKnfEbq7sbLPfL3p9vr9Bv94+qEF5bHs7EsDBmvEZRVy7CtyKY+QLLMLwmKYmjnbWsTKPXi2ATw6TyTAICqaQmtPSXO5EI5LUZrba7NN1ocF4vVLIIHANBKV9L3biXtlhGID07OkED1axyFLWF72sK9OTPbZi0nU401tMJiz0axqwxKU3RxOVXlyAoilKCpALVYCAkzchQVFOwzENQ4dC8LkYRTJwDh7EUwhMTCXVXb88OyAAFBhuAAWUE4pSNpRNECMfRexLAxGSmaxzXsZinCo4JDmgpYLGFfQeM-HCGzxbIfWEKSjwmItZlnRSLBWCxpmY8JC1BE4+R1KwMMXD9MS-XDG1eKyuzvQxmVZWiOS5KZ-HckwDH7Mwzh7IyApM9cvUVAD2zjMiZMmEtEPHYd5jk4J-BcuDzXMOZlm88wBTMft0uw+ssvlAjfX9Ei8tVaTj25YrM37Rke1MNMLTNLxdlmktDmmWxpn8R0-OXDKOp-LqygsjhQuA6C6uQjMsyS3MaqLcghTTaDizTJYTTaus1227hvUI-b+sPLsAjmpFwnk4UVn5U0arkyc+RMBwrG8cxnr4oKNwOwrizHI1IYCGEUr1eaEdIFGhttLldn1ZajFOW0TEcKJokiIA */
   mailMachineModel.createMachine({
-    context: mailMachineModel.initialContext,
-    tsTypes: {} as import('./mail-machine.config.typegen').Typegen0,
-    id: 'Secure mail',
-    initial: 'SECURE_SEND_ON',
-    states: {
-      SECURE_SEND_OFF: {
-        initial: 'IDLE',
-        states: {
-          IDLE: {
-            always: {
-              target: 'VALIDATING',
-            },
+  context: mailMachineModel.initialContext,
+  tsTypes: {} as import('./mail-machine.config.typegen').Typegen0,
+  id: 'Secure mail',
+  initial: 'SECURE_SEND_ON',
+  states: {
+    SECURE_SEND_OFF: {
+      initial: 'IDLE',
+      states: {
+        IDLE: {
+          always: {
+            target: 'VALIDATING',
           },
-          VALIDATING: {
-            invoke: {
-              src: 'validate',
-            },
-            on: {
-              validatingDraftSuccess: {
+        },
+        VALIDATING: {
+          invoke: {
+            src: 'validate',
+          },
+          on: {
+            validatingDraftSuccess: [
+              {
                 cond: 'isInvalid',
                 target: 'PROMPT',
               },
-            },
-          },
-          PROMPT: {
-            type: 'final',
-          },
-        },
-        on: {
-          toggle: {
-            target: 'SECURE_SEND_ON',
-          },
-          draftChanged: {
-            actions: 'setDraft',
-            target: '.VALIDATING',
+              {
+                target: 'VALID',
+              },
+            ],
           },
         },
+        PROMPT: {
+          type: 'final',
+        },
+        VALID: {},
       },
-      SECURE_SEND_ON: {
-        initial: 'IDLE',
-        states: {
-          IDLE: {
-            always: {
-              target: 'VALIDATING',
-            },
-          },
-          VALIDATING: {
-            invoke: {
-              src: 'validate',
-            },
-            on: {
-              validatingDraftSuccess: [
-                {
-                  actions: 'setViolations',
-                  cond: 'isInvalid',
-                  target: 'INVALID',
-                },
-                {
-                  actions: 'setViolations',
-                  target: 'VALID',
-                },
-              ],
-            },
-          },
-          INVALID: {
-            type: 'final',
-          },
-          VALID: {
-            type: 'final',
-          },
+      on: {
+        toggle: {
+          target: 'SECURE_SEND_ON',
         },
-        on: {
-          toggle: {
-            actions: 'resetViolations',
-            target: 'SECURE_SEND_OFF',
-          },
-          draftChanged: {
-            actions: 'setDraft',
-            target: '.VALIDATING',
-          },
+        draftChanged: {
+          actions: 'setDraft',
+          target: '.VALIDATING',
         },
       },
     },
-  });
+    SECURE_SEND_ON: {
+      initial: 'IDLE',
+      states: {
+        IDLE: {
+          always: {
+            target: 'VALIDATING',
+          },
+        },
+        VALIDATING: {
+          invoke: {
+            src: 'validate',
+          },
+          on: {
+            validatingDraftSuccess: [
+              {
+                actions: 'setViolations',
+                cond: 'isInvalid',
+                target: 'INVALID',
+              },
+              {
+                actions: 'setViolations',
+                target: 'VALID',
+              },
+            ],
+          },
+        },
+        INVALID: {
+          type: 'final',
+        },
+        VALID: {
+          type: 'final',
+        },
+      },
+      on: {
+        toggle: {
+          actions: 'resetViolations',
+          target: 'SECURE_SEND_OFF',
+        },
+        draftChanged: {
+          actions: 'setDraft',
+          target: '.VALIDATING',
+        },
+      },
+    },
+  },
+});

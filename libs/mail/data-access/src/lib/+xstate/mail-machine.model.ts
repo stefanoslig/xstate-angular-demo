@@ -23,7 +23,6 @@ export const mailMachineModel = createModel(
       validatingDraftSuccess: (violations: Array<Violation>) => ({
         violations,
       }),
-      showViolations: () => ({}),
     },
   }
 );

@@ -34,13 +34,14 @@ export interface Typegen0 {
     | 'SECURE_SEND_OFF.IDLE'
     | 'SECURE_SEND_OFF.VALIDATING'
     | 'SECURE_SEND_OFF.PROMPT'
+    | 'SECURE_SEND_OFF.VALID'
     | 'SECURE_SEND_ON'
     | 'SECURE_SEND_ON.IDLE'
     | 'SECURE_SEND_ON.VALIDATING'
     | 'SECURE_SEND_ON.INVALID'
     | 'SECURE_SEND_ON.VALID'
     | {
-        SECURE_SEND_OFF?: 'IDLE' | 'VALIDATING' | 'PROMPT';
+        SECURE_SEND_OFF?: 'IDLE' | 'VALIDATING' | 'PROMPT' | 'VALID';
         SECURE_SEND_ON?: 'IDLE' | 'VALIDATING' | 'INVALID' | 'VALID';
       };
   tags: never;
